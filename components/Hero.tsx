@@ -9,7 +9,7 @@ const Hero = () => {
         <a
           href="https://www.producthunt.com/posts/shipfast-2?utm_source=badge-top-post-badge&utm_medium=badge&utm_souce=badge-shipfast&#0045;2"
           target="_blank"
-          className=" -mb-4 md:-mb-6 group"
+          className=" -mb-4 md:-mb-6 invisible"
           title="Product Hunt link"
         >
           <svg
@@ -22,14 +22,13 @@ const Hero = () => {
         </a>
 
         <h1 className="font-extrabold text-4xl lg:text-6xl tracking-tight md:-mb-4">
-          Ship your startup in days, not weeks
+          Show your work today, not tomorrow.
         </h1>
         <p className="text-lg opacity-80 leading-relaxed">
-          The NextJS boilerplate with all you need to build your SaaS, AI tool,
-          or any other web app. From idea to production in 5 minutes.
+          Show your projects to the world with just a few clicks.
         </p>
         <button className="btn btn-primary btn-wide">
-          Get {config.appName}
+          Lets start
         </button>
 
         <TestimonialsAvatars priority={true} />

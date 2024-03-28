@@ -1,6 +1,8 @@
 import { NextResponse, NextRequest } from "next/server";
 import connectMongo from "@/libs/mongoose";
 import Lead from "@/models/Lead";
+import { sendEmail } from "@/libs/mailgun";
+import config from "@/config";
 
 // This route is used to store the leads that are generated from the landing page.
 // The API call is initiated by <ButtonLead /> component
@@ -15,13 +17,19 @@ export async function POST(req: NextRequest) {
   }
 
   try {
+    await Lead.deleteOne({ email: body.email })
     const lead = await Lead.findOne({ email: body.email });
 
     if (!lead) {
       await Lead.create({ email: body.email });
 
-      // Here you can add your own logic
-      // For instance, sending a welcome email (use the the sendEmail helper function from /libs/mailgun)
+      await sendEmail({
+        to: body.email,
+        subject: "Thanks for signing up!",
+        text: "We'll keep you updated with the latest news.",
+        html: "We'll keep you updated with the latest news.",
+        replyTo: config.mailgun.fromAdmin,
+      })
     }
 
     return NextResponse.json({});

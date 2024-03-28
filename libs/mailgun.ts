@@ -1,19 +1,15 @@
 import config from "@/config";
-const formData = require("form-data");
-const Mailgun = require("mailgun.js");
-const mailgun = new Mailgun(formData);
+const { Resend } = require("resend");
 
-const mg = mailgun.client({
-  username: "api",
-  key: process.env.MAILGUN_API_KEY || "dummy",
-});
-
-if (!process.env.MAILGUN_API_KEY && process.env.NODE_ENV === "development") {
-  console.group("⚠️ MAILGUN_API_KEY missing from .env");
+if (!process.env.RESEND_API_KEY && process.env.NODE_ENV === "development") {
+  console.group("⚠️ RESEND_API_KEY missing from .env");
   console.error("It's not mandatory but it's required to send emails.");
   console.error("If you don't need it, remove the code from /libs/mailgun.js");
   console.groupEnd();
 }
+
+const resend = new Resend(process.env.RESEND_API_KEY);
+
 
 /**
  * Sends an email using the provided parameters.
@@ -39,18 +35,24 @@ export const sendEmail = async ({
   html?: string;
   replyTo?: string;
 }): Promise<any> => {
-  const data = {
+  console.log("Sending email to", {
     from: config.mailgun.fromAdmin,
     to: [to],
     subject,
     text,
     html,
-    ...(replyTo && { "h:Reply-To": replyTo }),
-  };
-
-  await mg.messages.create(
-    (config.mailgun.subdomain ? `${config.mailgun.subdomain}.` : "") +
-      config.domainName,
-    data
-  );
+    headers: {
+      'Reply-To': replyTo,
+    },
+  });
+  await resend.emails.send({
+    from: config.mailgun.fromAdmin,
+    to: [to],
+    subject,
+    text,
+    html,
+    headers: {
+      'Reply-To': replyTo,
+    },
+  });
 };
