@@ -4,14 +4,8 @@ import CardCategory from "../../_assets/components/CardCategory";
 import { getSEOTags } from "@/libs/seo";
 import config from "@/config";
 
-export async function generateMetadata({
-  params,
-}: {
-  params: { categoryId: string };
-}) {
-  const category = categories.find(
-    (category) => category.slug === params.categoryId
-  );
+export async function generateMetadata({ params }: { params: { categoryId: string } }) {
+  const category = categories.find((category) => category.slug === params.categoryId);
 
   return getSEOTags({
     title: `${category.title} | Blog by ${config.appName}`,
@@ -20,33 +14,18 @@ export async function generateMetadata({
   });
 }
 
-export default async function Category({
-  params,
-}: {
-  params: { categoryId: string };
-}) {
-  const category = categories.find(
-    (category) => category.slug === params.categoryId
-  );
+export default async function Category({ params }: { params: { categoryId: string } }) {
+  const category = categories.find((category) => category.slug === params.categoryId);
   const articlesInCategory = articles
-    .filter((article) =>
-      article.categories.map((c) => c.slug).includes(category.slug)
-    )
-    .sort(
-      (a, b) =>
-        new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime()
-    )
+    .filter((article) => article.categories.map((c) => c.slug).includes(category.slug))
+    .sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime())
     .slice(0, 3);
 
   return (
     <>
       <section className="mt-12 mb-24 md:mb-32 max-w-3xl mx-auto text-center">
-        <h1 className="font-extrabold text-3xl lg:text-5xl tracking-tight mb-6 md:mb-12">
-          {category.title}
-        </h1>
-        <p className="md:text-lg opacity-80 max-w-xl mx-auto">
-          {category.description}
-        </p>
+        <h1 className="font-extrabold text-3xl lg:text-5xl tracking-tight mb-6 md:mb-12">{category.title}</h1>
+        <p className="md:text-lg opacity-80 max-w-xl mx-auto">{category.description}</p>
       </section>
 
       <section className="mb-24">
@@ -56,12 +35,7 @@ export default async function Category({
 
         <div className="grid lg:grid-cols-2 gap-8">
           {articlesInCategory.map((article) => (
-            <CardArticle
-              key={article.slug}
-              article={article}
-              tag="h3"
-              showCategory={false}
-            />
+            <CardArticle key={article.slug} article={article} tag="h3" showCategory={false} />
           ))}
         </div>
       </section>

@@ -4,11 +4,7 @@ import CardArticle from "../../_assets/components/CardArticle";
 import { getSEOTags } from "@/libs/seo";
 import config from "@/config";
 
-export async function generateMetadata({
-  params,
-}: {
-  params: { authorId: string };
-}) {
+export async function generateMetadata({ params }: { params: { authorId: string } }) {
   const author = authors.find((author) => author.slug === params.authorId);
 
   return getSEOTags({
@@ -18,33 +14,20 @@ export async function generateMetadata({
   });
 }
 
-export default async function Author({
-  params,
-}: {
-  params: { authorId: string };
-}) {
+export default async function Author({ params }: { params: { authorId: string } }) {
   const author = authors.find((author) => author.slug === params.authorId);
   const articlesByAuthor = articles
     .filter((article) => article.author.slug === author.slug)
-    .sort(
-      (a, b) =>
-        new Date(b.publishedAt).valueOf() - new Date(a.publishedAt).valueOf()
-    );
+    .sort((a, b) => new Date(b.publishedAt).valueOf() - new Date(a.publishedAt).valueOf());
 
   return (
     <>
       <section className="max-w-3xl mx-auto flex flex-col md:flex-row gap-8 mt-12 mb-24 md:mb-32">
         <div>
-          <p className="text-xs uppercase tracking-wide text-base-content/80 mb-2">
-            Authors
-          </p>
-          <h1 className="font-extrabold text-3xl lg:text-5xl tracking-tight mb-2">
-            {author.name}
-          </h1>
+          <p className="text-xs uppercase tracking-wide text-base-content/80 mb-2">Authors</p>
+          <h1 className="font-extrabold text-3xl lg:text-5xl tracking-tight mb-2">{author.name}</h1>
           <p className="md:text-lg mb-6 md:mb-10 font-medium">{author.job}</p>
-          <p className="md:text-lg text-base-content/80">
-            {author.description}
-          </p>
+          <p className="md:text-lg text-base-content/80">{author.description}</p>
         </div>
 
         <div className="max-md:order-first flex md:flex-col gap-4 shrink-0">

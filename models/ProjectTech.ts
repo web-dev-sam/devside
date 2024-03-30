@@ -10,12 +10,12 @@ const projectTechSchema = new mongoose.Schema(
     projectId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Project",
-    }
+    },
   },
   {
     timestamps: true,
     toJSON: { virtuals: true },
-  }
+  },
 );
 
 // add plugin that converts mongoose to json

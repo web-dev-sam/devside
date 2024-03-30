@@ -7,11 +7,7 @@ export default function Custom404() {
   return (
     <section className="relative bg-base-100 text-base-content h-screen w-full flex flex-col justify-center gap-8 items-center p-10">
       <div className="p-6 bg-white rounded-xl">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          className="w-56 h-56"
-          viewBox="0 0 860.13137 571.14799"
-        >
+        <svg xmlns="http://www.w3.org/2000/svg" className="w-56 h-56" viewBox="0 0 860.13137 571.14799">
           <path
             fill="#f2f2f2"
             d="M435.735 160.527c-7.669-12.684-16.757-26.228-30.99-30.37-16.481-4.796-33.412 4.732-47.774 14.135a1392.157 1392.157 0 0 0-123.893 91.283l.043.493 92.451-6.376c22.265-1.535 45.296-3.283 64.972-13.816 7.467-3.996 14.745-9.335 23.206-9.707 10.511-.463 19.677 6.879 26.88 14.549 42.607 45.37 54.937 114.754 102.738 154.616a1516.995 1516.995 0 0 0-107.633-214.807Z"
@@ -78,10 +74,7 @@ export default function Custom404() {
           <circle cx={728.249} cy={559} r={11} fill="#3f3d56" />
           <circle cx={755.249} cy={419} r={11} fill="#3f3d56" />
           <circle cx={723.249} cy={317} r={11} fill="#3f3d56" />
-          <path
-            fill="#3f3d56"
-            d="M264.249 419a10.949 10.949 0 1 1-.21-2.16 10.992 10.992 0 0 1 .21 2.16Z"
-          />
+          <path fill="#3f3d56" d="M264.249 419a10.949 10.949 0 1 1-.21-2.16 10.992 10.992 0 0 1 .21 2.16Z" />
           <circle cx={484.249} cy={349} r={11} fill="#3f3d56" />
           <path
             fill="#3f3d56"
@@ -95,18 +88,11 @@ export default function Custom404() {
           />
         </svg>
       </div>
-      <p className="text-lg md:text-xl font-semibold">
-        This page doesn&apos;t exist 😅
-      </p>
+      <p className="text-lg md:text-xl font-semibold">This page doesn&apos;t exist 😅</p>
 
       <div className="flex flex-wrap gap-4 justify-center">
         <Link href="/" className="btn btn-sm">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 20 20"
-            fill="currentColor"
-            className="w-5 h-5"
-          >
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-5 h-5">
             <path
               fillRule="evenodd"
               d="M9.293 2.293a1 1 0 011.414 0l7 7A1 1 0 0117 11h-1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-3a1 1 0 00-1-1H9a1 1 0 00-1 1v3a1 1 0 01-1 1H5a1 1 0 01-1-1v-6H3a1 1 0 01-.707-1.707l7-7z"

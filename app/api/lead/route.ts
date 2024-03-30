@@ -29,7 +29,7 @@ export async function POST(req: NextRequest) {
         text: "We'll keep you updated with the latest news.",
         html: "We'll keep you updated with the latest news.",
         replyTo: config.mailgun.fromAdmin,
-      })
+      });
     }
 
     return NextResponse.json({});

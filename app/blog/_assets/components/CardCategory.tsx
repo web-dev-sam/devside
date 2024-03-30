@@ -3,13 +3,7 @@ import Link from "next/link";
 import { categoryType } from "../content";
 
 // This is the category card that appears in the home page and in the category page
-const CardCategory = ({
-  category,
-  tag = "h2",
-}: {
-  category: categoryType;
-  tag?: keyof JSX.IntrinsicElements;
-}) => {
+const CardCategory = ({ category, tag = "h2" }: { category: categoryType; tag?: keyof JSX.IntrinsicElements }) => {
   const TitleTag = tag;
 
   return (
@@ -19,9 +13,7 @@ const CardCategory = ({
       title={category.title}
       rel="tag"
     >
-      <TitleTag className="md:text-lg font-medium">
-        {category?.titleShort || category.title}
-      </TitleTag>
+      <TitleTag className="md:text-lg font-medium">{category?.titleShort || category.title}</TitleTag>
     </Link>
   );
 };

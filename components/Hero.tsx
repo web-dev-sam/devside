@@ -24,12 +24,8 @@ const Hero = () => {
         <h1 className="font-extrabold text-4xl lg:text-6xl tracking-tight md:-mb-4">
           Show your work today, not tomorrow.
         </h1>
-        <p className="text-lg opacity-80 leading-relaxed">
-          Show your projects to the world with just a few clicks.
-        </p>
-        <button className="btn btn-primary btn-wide">
-          Lets start
-        </button>
+        <p className="text-lg opacity-80 leading-relaxed">Show your projects to the world with just a few clicks.</p>
+        <button className="btn btn-primary btn-wide">Lets start</button>
 
         <TestimonialsAvatars priority={true} />
       </div>

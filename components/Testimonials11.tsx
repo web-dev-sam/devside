@@ -29,11 +29,7 @@ const refTypes: {
     id: "product_hunt",
     ariaLabel: "See user review on Product Hunt",
     svg: (
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        viewBox="0 0 26.245 26.256"
-        className="w-[18px] h-[18px]"
-      >
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 26.245 26.256" className="w-[18px] h-[18px]">
         <path
           d="M26.254 13.128c0 7.253-5.875 13.128-13.128 13.128S-.003 20.382-.003 13.128 5.872 0 13.125 0s13.128 5.875 13.128 13.128"
           fill="#da552f"
@@ -49,11 +45,7 @@ const refTypes: {
     id: "twitter",
     ariaLabel: "See user post on Twitter",
     svg: (
-      <svg
-        className="w-5 h-5 fill-[#00aCee]"
-        xmlns="http://www.w3.org/2000/svg"
-        viewBox="0 0 24 24"
-      >
+      <svg className="w-5 h-5 fill-[#00aCee]" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
         <path d="M19.633 7.997c.013.175.013.349.013.523 0 5.325-4.053 11.461-11.46 11.461-2.282 0-4.402-.661-6.186-1.809.324.037.636.05.973.05a8.07 8.07 0 0 0 5.001-1.721 4.036 4.036 0 0 1-3.767-2.793c.249.037.499.062.761.062.361 0 .724-.05 1.061-.137a4.027 4.027 0 0 1-3.23-3.953v-.05c.537.299 1.16.486 1.82.511a4.022 4.022 0 0 1-1.796-3.354c0-.748.199-1.434.548-2.032a11.457 11.457 0 0 0 8.306 4.215c-.062-.3-.1-.611-.1-.923a4.026 4.026 0 0 1 4.028-4.028c1.16 0 2.207.486 2.943 1.272a7.957 7.957 0 0 0 2.556-.973 4.02 4.02 0 0 1-1.771 2.22 8.073 8.073 0 0 0 2.319-.624 8.645 8.645 0 0 1-2.019 2.083z"></path>
       </svg>
     ),
@@ -196,23 +188,14 @@ const Testimonial = ({ i }: { i: number }) => {
           </div>
           <div className="w-full flex items-end justify-between gap-2">
             <div>
-              <div className="text-sm font-medium text-base-content">
-                {testimonial.name}
-              </div>
+              <div className="text-sm font-medium text-base-content">{testimonial.name}</div>
               {testimonial.username && (
-                <div className="mt-0.5 text-sm text-base-content/80">
-                  @{testimonial.username}
-                </div>
+                <div className="mt-0.5 text-sm text-base-content/80">@{testimonial.username}</div>
               )}
             </div>
 
             {testimonial.link && testimonial.type?.svg && (
-              <a
-                href={testimonial.link}
-                target="_blank"
-                className="shrink-0 "
-                aria-label={testimonial.type?.ariaLabel}
-              >
+              <a href={testimonial.link} target="_blank" className="shrink-0 " aria-label={testimonial.type?.ariaLabel}>
                 {testimonial.type?.svg}
               </a>
             )}
@@ -273,10 +256,7 @@ const VideoTestimonial = ({ i }: { i: number }) => {
             setIsLoading(false);
           }}
         >
-          <source
-            src={testimonial.videoSrc}
-            type={testimonial.videoType || "video/mp4"}
-          />
+          <source src={testimonial.videoSrc} type={testimonial.videoType || "video/mp4"} />
           Your browser does not support the videos
         </video>
 
@@ -326,9 +306,7 @@ const VideoTestimonial = ({ i }: { i: number }) => {
 
             {!isPlaying && (
               <div className="animate-opacity text-right">
-                <p className="text-gray-50 font-medium drop-shadow">
-                  {testimonial.name}
-                </p>
+                <p className="text-gray-50 font-medium drop-shadow">{testimonial.name}</p>
                 <div className="rating">
                   {[...Array(5)].map((_, i) => (
                     <svg
@@ -370,8 +348,7 @@ const Testimonials11 = () => {
             </h2>
           </div>
           <p className="lg:w-2/3 mx-auto leading-relaxed text-base text-base-content/80">
-            Don&apos;t take our word for it. Here&apos;s what they have to say
-            about {config.appName}.
+            Don&apos;t take our word for it. Here&apos;s what they have to say about {config.appName}.
           </p>
         </div>
 
@@ -393,9 +370,7 @@ const Testimonials11 = () => {
               <li>
                 <figure className="relative h-full p-6 bg-base-100 rounded-lg">
                   <blockquote className="relative p-4">
-                    <p className="text-lg font-medium text-base-content">
-                      {list[list.length - 1].text}
-                    </p>
+                    <p className="text-lg font-medium text-base-content">{list[list.length - 1].text}</p>
                   </blockquote>
                   <figcaption className="relative flex items-center justify-start gap-4 pt-4 mt-4 border-t border-base-content/5">
                     <div className="overflow-hidden rounded-full bg-base-300 shrink-0">
@@ -403,9 +378,7 @@ const Testimonials11 = () => {
                         <Image
                           className="w-12 h-12 rounded-full object-cover"
                           src={list[list.length - 1].img}
-                          alt={`${
-                            list[list.length - 1].name
-                          }'s testimonial for ${config.appName}`}
+                          alt={`${list[list.length - 1].name}'s testimonial for ${config.appName}`}
                           width={48}
                           height={48}
                         />
@@ -416,13 +389,9 @@ const Testimonials11 = () => {
                       )}
                     </div>
                     <div>
-                      <div className="text-base font-medium text-base-content">
-                        {list[list.length - 1].name}
-                      </div>
+                      <div className="text-base font-medium text-base-content">{list[list.length - 1].name}</div>
                       {list[list.length - 1].username && (
-                        <div className="mt-1 text-base text-base-content/80">
-                          @{list[list.length - 1].username}
-                        </div>
+                        <div className="mt-1 text-base text-base-content/80">@{list[list.length - 1].username}</div>
                       )}
                     </div>
                   </figcaption>

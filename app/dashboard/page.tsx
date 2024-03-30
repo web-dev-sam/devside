@@ -9,11 +9,15 @@ export default async function Dashboard() {
   const session = await getServerSession(authOptions);
   const user = await User.findById(session.user.id);
 
-  console.log(user);
-
   return (
     <>
-      <DashboardForm userName={user.name ?? ""} role={user.role ?? ""} location={user.location ?? ""} bio={user.bio ?? ""} pfp={(user.customImage || user.image) ?? ""} />
+      <DashboardForm
+        userName={user.name ?? ""}
+        role={user.role ?? ""}
+        location={user.location ?? ""}
+        bio={user.bio ?? ""}
+        pfp={(user.customImage || user.image) ?? ""}
+      />
     </>
   );
 }

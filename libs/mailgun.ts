@@ -10,7 +10,6 @@ if (!process.env.RESEND_API_KEY && process.env.NODE_ENV === "development") {
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
-
 /**
  * Sends an email using the provided parameters.
  *
@@ -42,7 +41,7 @@ export const sendEmail = async ({
     text,
     html,
     headers: {
-      'Reply-To': replyTo,
+      "Reply-To": replyTo,
     },
   });
   await resend.emails.send({
@@ -52,7 +51,7 @@ export const sendEmail = async ({
     text,
     html,
     headers: {
-      'Reply-To': replyTo,
+      "Reply-To": replyTo,
     },
   });
 };

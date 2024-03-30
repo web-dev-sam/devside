@@ -21,9 +21,7 @@ const links: {
   },
 ];
 
-const cta: JSX.Element = (
-  <ButtonSignin text="Prevent disputes" extraStyle="btn-primary md:btn-sm" />
-);
+const cta: JSX.Element = <ButtonSignin text="Prevent disputes" extraStyle="btn-primary md:btn-sm" />;
 
 const ButtonPopoverCategories = () => {
   return (
@@ -39,9 +37,7 @@ const ButtonPopoverCategories = () => {
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 20 20"
               fill="currentColor"
-              className={`w-5 h-5 duration-200 ${
-                open ? "transform rotate-180 " : ""
-              }`}
+              className={`w-5 h-5 duration-200 ${open ? "transform rotate-180 " : ""}`}
             >
               <path
                 fillRule="evenodd"
@@ -69,13 +65,8 @@ const ButtonPopoverCategories = () => {
                           href={`/blog/category/${category.slug}`}
                         >
                           <div className="">
-                            <p className="font-medium mb-0.5">
-                              {category?.titleShort || category.title}
-                            </p>
-                            <p className="text-sm opacity-80">
-                              {category?.descriptionShort ||
-                                category.description}
-                            </p>
+                            <p className="font-medium mb-0.5">{category?.titleShort || category.title}</p>
+                            <p className="text-sm opacity-80">{category?.descriptionShort || category.description}</p>
                           </div>
                         </Link>
                       </div>
@@ -110,9 +101,7 @@ const ButtonAccordionCategories = () => {
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 20 20"
           fill="currentColor"
-          className={`w-5 h-5 duration-200 ${
-            isOpen ? "transform rotate-180 " : ""
-          }`}
+          className={`w-5 h-5 duration-200 ${isOpen ? "transform rotate-180 " : ""}`}
         >
           <path
             fillRule="evenodd"
@@ -157,19 +146,8 @@ const HeaderBlog = () => {
       <nav className="max-w-7xl flex items-center justify-between px-8 py-3 mx-auto">
         {/* Your logo/name on large screens */}
         <div className="flex lg:flex-1">
-          <Link
-            className="flex items-center gap-2 shrink-0 "
-            href="/"
-            title={`${config.appName} homepage`}
-          >
-            <Image
-              src={logo}
-              alt={`${config.appName} logo`}
-              className="w-8"
-              priority={true}
-              width={32}
-              height={32}
-            />
+          <Link className="flex items-center gap-2 shrink-0 " href="/" title={`${config.appName} homepage`}>
+            <Image src={logo} alt={`${config.appName} logo`} className="w-8" priority={true} width={32} height={32} />
             <span className="font-extrabold text-lg">{config.appName}</span>
           </Link>
         </div>
@@ -189,11 +167,7 @@ const HeaderBlog = () => {
               stroke="currentColor"
               className="w-6 h-6 text-base-content"
             >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"
-              />
+              <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
             </svg>
           </button>
         </div>
@@ -225,11 +199,7 @@ const HeaderBlog = () => {
         >
           {/* Your logo/name on small screens */}
           <div className="flex items-center justify-between">
-            <Link
-              className="flex items-center gap-2 shrink-0 "
-              title={`${config.appName} homepage`}
-              href="/"
-            >
+            <Link className="flex items-center gap-2 shrink-0 " title={`${config.appName} homepage`} href="/">
               <Image
                 src={logo}
                 alt={`${config.appName} logo`}
@@ -241,11 +211,7 @@ const HeaderBlog = () => {
               />
               <span className="font-extrabold text-lg">{config.appName}</span>
             </Link>
-            <button
-              type="button"
-              className="-m-2.5 rounded-box p-2.5"
-              onClick={() => setIsOpen(false)}
-            >
+            <button type="button" className="-m-2.5 rounded-box p-2.5" onClick={() => setIsOpen(false)}>
               <span className="sr-only">Close menu</span>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -255,11 +221,7 @@ const HeaderBlog = () => {
                 stroke="currentColor"
                 className="w-6 h-6"
               >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M6 18L18 6M6 6l12 12"
-                />
+                <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
               </svg>
             </button>
           </div>
@@ -269,12 +231,7 @@ const HeaderBlog = () => {
             <div className="py-4">
               <div className="flex flex-col gap-y-4 items-start">
                 {links.map((link) => (
-                  <Link
-                    href={link.href}
-                    key={link.href}
-                    className="link link-hover"
-                    title={link.label}
-                  >
+                  <Link href={link.href} key={link.href} className="link link-hover" title={link.label}>
                     {link.label}
                   </Link>
                 ))}

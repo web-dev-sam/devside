@@ -1,13 +1,8 @@
-import type { Config } from "tailwindcss"
+import type { Config } from "tailwindcss";
 
 const config = {
   darkMode: ["class"],
-  content: [
-    './pages/**/*.{ts,tsx}',
-    './components/**/*.{ts,tsx}',
-    './app/**/*.{ts,tsx}',
-    './src/**/*.{ts,tsx}',
-	],
+  content: ["./pages/**/*.{ts,tsx}", "./components/**/*.{ts,tsx}", "./app/**/*.{ts,tsx}", "./src/**/*.{ts,tsx}"],
   prefix: "",
   theme: {
     container: {
@@ -19,8 +14,7 @@ const config = {
     },
     extend: {
       backgroundImage: {
-        gradient:
-          "linear-gradient(60deg, #f79533, #f37055, #ef4e7b, #a166ab, #5073b8, #1098ad, #07b39b, #6fba82)",
+        gradient: "linear-gradient(60deg, #f79533, #f37055, #ef4e7b, #a166ab, #5073b8, #1098ad, #07b39b, #6fba82)",
       },
       animation: {
         opacity: "opacity 0.25s ease-in-out",
@@ -117,12 +111,12 @@ const config = {
         sm: "calc(var(--radius) - 4px)",
       },
       fontFamily: {
-        calcom: ['var(--font-calcom)'],
-        inter: ['var(--font-inter)'],
+        calcom: ["var(--font-calcom)"],
+        inter: ["var(--font-inter)"],
       },
     },
   },
   plugins: [require("tailwindcss-animate")],
-} satisfies Config
+} satisfies Config;
 
-export default config
+export default config;

@@ -12,22 +12,15 @@ export async function POST(req: NextRequest) {
   const body = await req.json();
 
   if (!body.priceId) {
-    return NextResponse.json(
-      { error: "Price ID is required" },
-      { status: 400 }
-    );
+    return NextResponse.json({ error: "Price ID is required" }, { status: 400 });
   } else if (!body.successUrl || !body.cancelUrl) {
-    return NextResponse.json(
-      { error: "Success and cancel URLs are required" },
-      { status: 400 }
-    );
+    return NextResponse.json({ error: "Success and cancel URLs are required" }, { status: 400 });
   } else if (!body.mode) {
     return NextResponse.json(
       {
-        error:
-          "Mode is required (either 'payment' for one-time payments or 'subscription' for recurring subscription)",
+        error: "Mode is required (either 'payment' for one-time payments or 'subscription' for recurring subscription)",
       },
-      { status: 400 }
+      { status: 400 },
     );
   }
 

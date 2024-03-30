@@ -7,7 +7,7 @@ const nextConfig = {
       "pbs.twimg.com",
       "images.unsplash.com",
       "logos-world.net",
-      "devside.s3.eu-central-1.amazonaws.com"
+      "devside.s3.eu-central-1.amazonaws.com",
     ],
   },
 };

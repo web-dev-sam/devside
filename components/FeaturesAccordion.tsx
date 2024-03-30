@@ -137,14 +137,8 @@ const Item = ({
         }}
         aria-expanded={isOpen}
       >
-        <span className={`duration-100 ${isOpen ? "text-primary" : ""}`}>
-          {svg}
-        </span>
-        <span
-          className={`flex-1 text-base-content ${
-            isOpen ? "text-primary font-semibold" : ""
-          }`}
-        >
+        <span className={`duration-100 ${isOpen ? "text-primary" : ""}`}>{svg}</span>
+        <span className={`flex-1 text-base-content ${isOpen ? "text-primary font-semibold" : ""}`}>
           <h3 className="inline">{title}</h3>
         </span>
       </button>
@@ -152,11 +146,7 @@ const Item = ({
       <div
         ref={accordion}
         className={`transition-all duration-300 ease-in-out text-base-content-secondary overflow-hidden`}
-        style={
-          isOpen
-            ? { maxHeight: accordion?.current?.scrollHeight, opacity: 1 }
-            : { maxHeight: 0, opacity: 0 }
-        }
+        style={isOpen ? { maxHeight: accordion?.current?.scrollHeight, opacity: 1 } : { maxHeight: 0, opacity: 0 }}
       >
         <div className="pb-5 leading-relaxed">{description}</div>
       </div>
@@ -176,16 +166,7 @@ const Media = ({ feature }: { feature: Feature }) => {
 
   if (type === "video") {
     return (
-      <video
-        className={style}
-        autoPlay
-        muted
-        loop
-        playsInline
-        controls
-        width={size.width}
-        height={size.height}
-      >
+      <video className={style} autoPlay muted loop playsInline controls width={size.width} height={size.height}>
         <source src={path} type={format} />
       </video>
     );
@@ -210,10 +191,7 @@ const FeaturesAccordion = () => {
   const [featureSelected, setFeatureSelected] = useState<number>(0);
 
   return (
-    <section
-      className="py-24 md:py-32 space-y-24 md:space-y-32 max-w-7xl mx-auto bg-base-100 "
-      id="features"
-    >
+    <section className="py-24 md:py-32 space-y-24 md:space-y-32 max-w-7xl mx-auto bg-base-100 " id="features">
       <div className="px-8">
         <h2 className="font-extrabold text-4xl lg:text-6xl tracking-tight mb-12 md:mb-24">
           All you need to ship your startup fast

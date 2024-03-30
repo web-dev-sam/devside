@@ -42,17 +42,10 @@ const Header = () => {
 
   return (
     <header className="bg-base-200">
-      <nav
-        className="container flex items-center justify-between px-8 py-4 mx-auto"
-        aria-label="Global"
-      >
+      <nav className="container flex items-center justify-between px-8 py-4 mx-auto" aria-label="Global">
         {/* Your logo/name on large screens */}
         <div className="flex lg:flex-1">
-          <Link
-            className="flex items-center gap-2 shrink-0 "
-            href="/"
-            title={`${config.appName} homepage`}
-          >
+          <Link className="flex items-center gap-2 shrink-0 " href="/" title={`${config.appName} homepage`}>
             <Image
               src={logo}
               alt={`${config.appName} logo`}
@@ -81,11 +74,7 @@ const Header = () => {
               stroke="currentColor"
               className="w-6 h-6 text-base-content"
             >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"
-              />
+              <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
             </svg>
           </button>
         </div>
@@ -93,12 +82,7 @@ const Header = () => {
         {/* Your links on large screens */}
         <div className="hidden lg:flex lg:justify-center lg:gap-12 lg:items-center">
           {links.map((link) => (
-            <Link
-              href={link.href}
-              key={link.href}
-              className="link link-hover"
-              title={link.label}
-            >
+            <Link href={link.href} key={link.href} className="link link-hover" title={link.label}>
               {link.label}
             </Link>
           ))}
@@ -115,11 +99,7 @@ const Header = () => {
         >
           {/* Your logo/name on small screens */}
           <div className="flex items-center justify-between">
-            <Link
-              className="flex items-center gap-2 shrink-0 "
-              title={`${config.appName} homepage`}
-              href="/"
-            >
+            <Link className="flex items-center gap-2 shrink-0 " title={`${config.appName} homepage`} href="/">
               <Image
                 src={logo}
                 alt={`${config.appName} logo`}
@@ -131,11 +111,7 @@ const Header = () => {
               />
               <span className="font-extrabold text-lg">{config.appName}</span>
             </Link>
-            <button
-              type="button"
-              className="-m-2.5 rounded-md p-2.5"
-              onClick={() => setIsOpen(false)}
-            >
+            <button type="button" className="-m-2.5 rounded-md p-2.5" onClick={() => setIsOpen(false)}>
               <span className="sr-only">Close menu</span>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -145,11 +121,7 @@ const Header = () => {
                 stroke="currentColor"
                 className="w-6 h-6"
               >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M6 18L18 6M6 6l12 12"
-                />
+                <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
               </svg>
             </button>
           </div>
@@ -159,12 +131,7 @@ const Header = () => {
             <div className="py-4">
               <div className="flex flex-col gap-y-4 items-start">
                 {links.map((link) => (
-                  <Link
-                    href={link.href}
-                    key={link.href}
-                    className="link link-hover"
-                    title={link.label}
-                  >
+                  <Link href={link.href} key={link.href} className="link link-hover" title={link.label}>
                     {link.label}
                   </Link>
                 ))}

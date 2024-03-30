@@ -88,10 +88,7 @@ export const createCheckout = async ({
 };
 
 // This is used to create Customer Portal sessions, so users can manage their subscriptions (payment methods, cancel, etc..)
-export const createCustomerPortal = async ({
-  customerId,
-  returnUrl,
-}: CreateCustomerPortalParams): Promise<string> => {
+export const createCustomerPortal = async ({ customerId, returnUrl }: CreateCustomerPortalParams): Promise<string> => {
   const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
     apiVersion: "2023-08-16", // TODO: update this when Stripe updates their API
     typescript: true,
