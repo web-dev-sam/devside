@@ -67,9 +67,9 @@ const config = {
   },
   aws: {
     // If you use AWS S3/Cloudfront, put values in here
-    bucket: "bucket-name",
-    bucketUrl: `https://bucket-name.s3.amazonaws.com/`,
-    cdn: "https://cdn-id.cloudfront.net/",
+    bucket: "devside",
+    bucketUrl: `https://devside.s3.amazonaws.com/`,
+    cdn: "https://d1myjot56a76vo.cloudfront.net/",
   },
   mailgun: {
     // subdomain to use when sending emails, if you don't have a subdomain, just remove it. Highly recommended to have one (i.e. mg.yourdomain.com or mail.yourdomain.com)

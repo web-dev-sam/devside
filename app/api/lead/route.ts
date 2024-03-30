@@ -17,7 +17,7 @@ export async function POST(req: NextRequest) {
   }
 
   try {
-    await Lead.deleteOne({ email: body.email })
+    // await Lead.deleteOne({ email: body.email })
     const lead = await Lead.findOne({ email: body.email });
 
     if (!lead) {

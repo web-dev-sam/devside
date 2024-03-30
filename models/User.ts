@@ -17,6 +17,18 @@ const userSchema = new mongoose.Schema(
     image: {
       type: String,
     },
+    customImage: {
+      type: String,
+    },
+    role: {
+      type: String,
+    },
+    location: {
+      type: String,
+    },
+    bio: {
+      type: String,
+    },
     // Used in the Stripe webhook to identify the user in Stripe and later create Customer Portal or prefill user credit card details
     customerId: {
       type: String,
