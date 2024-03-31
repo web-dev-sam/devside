@@ -1,5 +1,6 @@
-import mongoose from "mongoose";
+import mongoose, { Document } from "mongoose";
 import toJSON from "./plugins/toJSON";
+import { Platform } from "@/app/dashboard/LinkSettings";
 
 // USER SCHEMA
 const userSchema = new mongoose.Schema(
@@ -29,6 +30,17 @@ const userSchema = new mongoose.Schema(
     bio: {
       type: String,
     },
+    socialLinks: [
+      {
+        platform: {
+          type: String,
+          enum: ['twitter', 'github', 'linkedin', 'dribbble', 'behance'] as Platform[]
+        },
+        username: {
+          type: String
+        }
+      }
+    ],
     // Used in the Stripe webhook to identify the user in Stripe and later create Customer Portal or prefill user credit card details
     customerId: {
       type: String,
@@ -58,4 +70,24 @@ const userSchema = new mongoose.Schema(
 // add plugin that converts mongoose to json
 userSchema.plugin(toJSON);
 
-export default mongoose.models.User || mongoose.model("User", userSchema);
+export interface IUser extends Document {
+  _id: mongoose.Types.ObjectId;
+  name: string;
+  email: string;
+  image?: string;
+  customImage?: string;
+  role?: string;
+  location?: string;
+  bio?: string;
+  socialLinks?: {
+    platform: Platform;
+    username: string;
+  }[];
+  customerId?: string;
+  priceId?: string;
+  hasAccess?: boolean;
+  createdAt?: Date;
+  updatedAt?: Date;
+}
+
+export default mongoose.models.User || mongoose.model<IUser>("User", userSchema);

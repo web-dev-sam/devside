@@ -1,311 +1,203 @@
 "use client";
 
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
-import { cn } from "@/lib/utils";
+import { ChangeEvent, useState } from "react";
+
 import { Button } from "@/components/ui/button";
-import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { useEffect, useState } from "react";
+import { GeneralSettings, type GeneralSettingsData } from "./GeneralSettings";
+import { LinkSettings, SocialLink, SocialSettingsData } from "./LinkSettings";
+import { ProjectSettings } from "./ProjectSettings";
 import Image from "next/image";
-import { Check, ChevronsUpDown } from "lucide-react";
-import { FancyMultiSelect } from "./MultiSelect";
-import { Form, FormControl, FormField, FormItem, FormLabel } from "@/components/ui/form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
-import { useForm } from "react-hook-form";
+
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { debounceImmediate } from "@/lib/utils";
+import { Pen } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { saveUserSettings, uploadProfileImage } from "@/lib/api";
 import { useToast } from "@/components/ui/use-toast";
 
-const socials = [
-  {
-    value: "twitter",
-    label: "Twitter",
-  },
-  {
-    value: "github",
-    label: "GitHub",
-  },
-  {
-    value: "linkedin",
-    label: "LinkedIn",
-  },
-  {
-    value: "dribbble",
-    label: "Dribbble",
-  },
-  {
-    value: "behance",
-    label: "Behance",
-  },
-];
-
-const formSchema = z.object({
-  username: z
-    .string()
-    .min(2, {
-      message: "Username must be at least 2 characters.",
-    })
-    .max(32, {
-      message: "Username must be at most 32 characters.",
-    }),
-  pfp: typeof window === "undefined" ? z.any().optional() : z.instanceof(FileList).optional(),
-  role: z
-    .string()
-    .max(32, {
-      message: "Role must be at most 32 characters.",
-    })
-    .optional(),
-  location: z
-    .string()
-    .max(48, {
-      message: "Location must be at most 48 characters.",
-    })
-    .optional(),
-  bio: z
-    .string()
-    .max(256, {
-      message: "Bio must be at most 256 characters.",
-    })
-    .optional(),
-});
-
 export default function DashboardForm({
-  userName,
-  pfp,
-  role,
-  location,
-  bio,
+  serverUserName,
+  serverPfp,
+  serverRole,
+  serverLocation,
+  serverBio,
+  serverSocialLinks,
 }: {
-  userName: string;
-  pfp: string;
-  role: string;
-  location: string;
-  bio: string;
+  serverUserName: string;
+  serverPfp: string;
+  serverRole: string;
+  serverLocation: string;
+  serverBio: string;
+  serverSocialLinks: SocialLink[];
 }) {
-  const [open, setOpen] = useState(false);
-  const [value, setValue] = useState("");
-  const { toast } = useToast();
-  const [lastSavedProfileData, setLastSavedProfileData] = useState({
-    username: userName,
-    role: role,
-    location: location,
-    bio: bio,
+  const [currentTab, setCurrentTab] = useState("general");
+  const [pfp, setPfp] = useState(serverPfp);
+  const [unsavedChanges, setUnsavedChanges] = useState(false);
+  const toast = useToast();
+
+  const [generalData, setGeneralData] = useState<GeneralSettingsData>({
+    username: serverUserName,
+    role: serverRole,
+    location: serverLocation,
+    bio: serverBio,
   });
-  const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
-    defaultValues: {
-      username: userName,
-      role: role,
-      location: location,
-      bio: bio,
-    },
+  const [socialData, setSocialData] = useState<SocialSettingsData>({
+    links: [],
   });
-  const fileRef = form.register("pfp");
 
-  const { username: usernameDep, role: roleDep, location: locationDep, bio: bioDep } = form.watch();
+  function onGeneralChange(data: GeneralSettingsData) {
+    setGeneralData(data);
+    setUnsavedChanges(true);
+  }
 
-  useEffect(() => {
-    const fields = ["username", "role", "location", "bio"] as const;
+  function onSocialChange(data: SocialSettingsData) {
+    setSocialData(data);
+    setUnsavedChanges(true);
+  }
 
-    setHasUnsavedChanges(fields.some((field) => form.getValues([field])[0] !== lastSavedProfileData[field]));
-  }, [lastSavedProfileData, form, usernameDep, roleDep, locationDep, bioDep]);
+  async function onSave() {
+    const settings = {
+      ...generalData,
+      ...socialData,
+    };
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    if (!hasUnsavedChanges) {
+    saveUserSettings(settings)
+      .then(() => {
+        setUnsavedChanges(false);
+        toast.toast({
+          title: "Success",
+          description: "Settings saved successfully.",
+        });
+      })
+      .catch((err) => {
+        console.error("Failed to save settings", err);
+        toast.toast({
+          title: "Error",
+          description: "Failed to save settings.",
+          variant: "destructive",
+        });
+      });
+
+    setUnsavedChanges(false);
+  }
+
+  async function onPfpChange(e: ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    if (!file) {
       return;
     }
 
-    const formData = new FormData();
-    formData.append("username", values.username);
-    if (values.pfp[0]) formData.append("pfp", values.pfp[0]);
-    if (values.role != null) formData.append("role", values.role);
-    if (values.location != null) formData.append("location", values.location);
-    if (values.bio != null) formData.append("bio", values.bio);
+    const [uploadResult, base64Result] = await Promise.allSettled([
+      uploadProfileImage(file),
+      new Promise((resolve) => {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          const result = e.target?.result;
+          if (typeof result !== "string") {
+            resolve(null);
+            return;
+          }
+          resolve(result);
+        };
+        reader.onerror = (e) => {
+          resolve(null);
+        };
+        reader.onabort = (e) => {
+          resolve(null);
+        };
+        reader.readAsDataURL(file);
+      }) as Promise<string | null>,
+    ]);
 
-    fetch("/api/upload", {
-      method: "POST",
-      body: formData,
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        const { name, role, location, bio } = data;
+    if (uploadResult.status === "rejected") {
+      console.error("Failed to upload profile image.");
+      toast.toast({
+        title: "Error",
+        description: "Failed to upload profile image.",
+        variant: "destructive",
+      });
+      return;
+    }
 
-        form.setValue("username", name);
-        form.setValue("role", role);
-        form.setValue("location", location);
-        form.setValue("bio", bio);
+    if (!uploadResult.value.ok) {
+      console.error("Failed to upload profile image.");
+      toast.toast({
+        title: "Error",
+        description: await uploadResult.value.json().then((res) => res.error),
+        variant: "destructive",
+      });
+      return;
+    }
 
-        setLastSavedProfileData({
-          username: name,
-          role: role,
-          location: location,
-          bio: bio,
-        });
-
-        console.log(data);
-        toast({
-          title: "Saved Successfully!",
-        });
-      })
-      .catch((e) => console.error(e));
+    if (base64Result.status === "fulfilled" && base64Result.value) {
+      setPfp(base64Result.value);
+    } else {
+      setPfp(await uploadResult.value.json().then((data) => data.image));
+    }
   }
 
   return (
     <>
-      <main className="min-h-screen p-8 pb-24">
-        <section className="max-w-xl mx-auto space-y-8">
-          <h1 className="text-3xl md:text-4xl font-extrabold font-calcom">Your Devside</h1>
-          <div className="space-y-4">
-            <div className="grid w-full max-w-sm items-center gap-1.5">
-              <Image src={pfp} width={256} height={256} alt="Profile Picture" priority={true} />
-              <Form {...form}>
-                <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-                  <FormField
-                    control={form.control}
-                    name="username"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Your Name</FormLabel>
-                        <FormControl>
-                          <Input placeholder="Jeff Bezos" {...field} />
-                        </FormControl>
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={form.control}
-                    name="pfp"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Profile Image</FormLabel>
-                        <FormControl>
-                          <Input type="file" placeholder="shadcn" {...fileRef} />
-                        </FormControl>
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={form.control}
-                    name="role"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Role</FormLabel>
-                        <FormControl>
-                          <Input placeholder="Potato Peeler" {...field} />
-                        </FormControl>
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={form.control}
-                    name="location"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Based In</FormLabel>
-                        <FormControl>
-                          <Input placeholder="Canada" {...field} />
-                        </FormControl>
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={form.control}
-                    name="bio"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Bio</FormLabel>
-                        <FormControl>
-                          <Textarea placeholder="e.g. What inspires you?" {...field} />
-                        </FormControl>
-                      </FormItem>
-                    )}
-                  />
-                  <Button type="submit" disabled={!hasUnsavedChanges}>
-                    Submit
-                  </Button>
-                </form>
-              </Form>
+      <main className="min-h-screen p-8 pb-24 text-center">
+        <div
+          className="relative my-28 w-32 mx-auto rounded-lg overflow-hidden group cursor-pointer"
+          onClick={() => {
+            document.getElementById("pfp")?.click();
+          }}
+        >
+          <Input type="file" accept="image/*" className="sr-only" id="pfp" onChange={(e) => onPfpChange(e)} />
+          <Image
+            src={pfp}
+            width={128}
+            height={128}
+            alt="Your Profile Picture"
+            priority={true}
+            className="w-32 h-32 object-cover object-center"
+          />
+          <div className="opacity-0 transition-opacity group-hover:opacity-100">
+            <div className="absolute inset-0 bg-[#00000090]" />
+            <div className="absolute left-1/2 top-1/2 -translate-x-2/4 -translate-y-2/4">
+              <Pen className="w-6 h-6 text-white" />
             </div>
           </div>
-        </section>
-        <section className="flex justify-center mt-16 gap-8">
-          <div>
-            <h2 className="text-2xl mb-4 font-calcom">Links</h2>
-            <div className="flex gap-2">
-              <div className="flex-1">
-                <Input type="text" placeholder="Link..." />
-              </div>
-              <div className="flex-1">
-                <Popover open={open} onOpenChange={setOpen}>
-                  <PopoverTrigger asChild>
-                    <Button
-                      variant="outline"
-                      role="combobox"
-                      aria-expanded={open}
-                      className="w-[200px] justify-between"
-                    >
-                      {value ? socials.find((social) => social.value === value)?.label : "Select social..."}
-                      <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-                    </Button>
-                  </PopoverTrigger>
-                  <PopoverContent className="w-[200px] p-0">
-                    <Command>
-                      <CommandInput placeholder="Search social..." />
-                      <CommandEmpty>No Socials found.</CommandEmpty>
-                      <CommandGroup>
-                        <CommandList>
-                          {socials.map((social) => (
-                            <CommandItem
-                              key={social.value}
-                              value={social.value}
-                              onSelect={(currentValue) => {
-                                setValue(currentValue === value ? "" : currentValue);
-                                setOpen(false);
-                              }}
-                            >
-                              <Check
-                                className={cn("mr-2 h-4 w-4", value === social.value ? "opacity-100" : "opacity-0")}
-                              />
-                              {social.label}
-                            </CommandItem>
-                          ))}
-                        </CommandList>
-                      </CommandGroup>
-                    </Command>
-                  </PopoverContent>
-                </Popover>
-              </div>
-              <div className="flex-1">
-                <Button>Add</Button>
-              </div>
-            </div>
-          </div>
-          <div className="space-y-2">
-            <h2 className="text-2xl font-calcom mb-4">Projects</h2>
-            <div className="flex gap-2">
-              <div>
-                <Input type="text" placeholder="L" className="w-10" />
-              </div>
-              <div className="flex-1">
-                <Input type="text" placeholder="Name..." />
-              </div>
-              <div className="flex-1">
-                <Input type="text" placeholder="Link..." />
-              </div>
-            </div>
-            <div>
-              <Textarea placeholder="Description..." />
-            </div>
-            <div>
-              <FancyMultiSelect />
-            </div>
-            <div>
-              <Button>Add</Button>
-            </div>
-          </div>
-        </section>
+        </div>
+        <h1 className="text-3xl md:text-4xl font-extrabold font-calcom my-28">Your Devside</h1>
+        <Tabs defaultValue="general" className="w-[400px] mx-auto">
+          <TabsList className="mb-4">
+            <TabsTrigger value="general" onClick={() => setCurrentTab("general")}>
+              General
+            </TabsTrigger>
+            <TabsTrigger value="socials" onClick={() => setCurrentTab("socials")}>
+              Socials
+            </TabsTrigger>
+            <TabsTrigger value="projects" onClick={() => setCurrentTab("projects")}>
+              Projects
+            </TabsTrigger>
+          </TabsList>
+          <TabsContent forceMount value="general" hidden={currentTab !== "general"}>
+            <GeneralSettings
+              serverUserName={serverUserName}
+              serverRole={serverRole}
+              serverLocation={serverLocation}
+              serverBio={serverBio}
+              onChange={(data) => onGeneralChange(data)}
+            />
+          </TabsContent>
+          <TabsContent forceMount value="socials" hidden={currentTab !== "socials"}>
+            <LinkSettings
+              serverLinks={serverSocialLinks}
+              onChange={(data) => onSocialChange(data)}
+            />
+          </TabsContent>
+          <TabsContent forceMount value="projects" hidden={currentTab !== "projects"}>
+            <ProjectSettings />
+          </TabsContent>
+        </Tabs>
+        <div>
+          <Button disabled={!unsavedChanges} onClick={() => debounceImmediate(onSave, 300)()} className="my-28">
+            {unsavedChanges ? "Save" : "Saved"}
+          </Button>
+        </div>
       </main>
     </>
   );
