@@ -30,9 +30,12 @@ export function GeneralSettings({
   const [role, setRole] = useState(serverRole);
   const [location, setLocation] = useState(serverLocation);
   const [bio, setBio] = useState(serverBio);
+  const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
 
   useEffect(() => {
-    onChange({ username, role, location, bio });
+    if (hasUnsavedChanges) {
+      onChange({ username, role, location, bio });
+    }
   }, [username, role, location, bio]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // function onSaveOld() {
@@ -84,7 +87,10 @@ export function GeneralSettings({
                 type="text"
                 id="name"
                 defaultValue={serverUserName}
-                onInput={(e) => setUsername(e.currentTarget.value)}
+                onInput={(e) => {
+                  setHasUnsavedChanges(true);
+                  setUsername(e.currentTarget.value);
+                }}
               />
             </div>
             <div>
@@ -93,7 +99,10 @@ export function GeneralSettings({
                 type="text"
                 id="role"
                 defaultValue={serverRole}
-                onInput={(e) => setRole(e.currentTarget.value)}
+                onInput={(e) => {
+                  setHasUnsavedChanges(true);
+                  setRole(e.currentTarget.value);
+                }}
               />
             </div>
             <div>
@@ -102,14 +111,20 @@ export function GeneralSettings({
                 type="text"
                 id="location"
                 defaultValue={serverLocation}
-                onInput={(e) => setLocation(e.currentTarget.value)}
+                onInput={(e) => {
+                  setHasUnsavedChanges(true);
+                  setLocation(e.currentTarget.value);
+                }}
               />
             </div>
             <div>
               <Label htmlFor="bio">Short Bio</Label>
               <Textarea
                 defaultValue={serverBio}
-                onInput={(e) => setBio(e.currentTarget.value)}
+                onInput={(e) => {
+                  setHasUnsavedChanges(true);
+                  setBio(e.currentTarget.value);
+                }}
               />
             </div>
           </div>

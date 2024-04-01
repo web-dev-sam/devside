@@ -53,14 +53,25 @@ export default function DashboardForm({
     location.hash = currentTab;
   }, [currentTab]);
 
+  useEffect(() => {
+    if (unsavedChanges) {
+      console.log("RIP")
+      window.onbeforeunload = () => true;
+    } else {
+      window.onbeforeunload = null;
+    }
+  }, [unsavedChanges]);
+
   function onGeneralChange(data: GeneralSettingsData) {
     setGeneralData(data);
     setUnsavedChanges(true);
+    console.log("RIP2")
   }
 
   function onSocialChange(data: SocialSettingsData) {
     setSocialData(data);
     setUnsavedChanges(true);
+    console.log("RIP3")
   }
 
   async function onSave() {
@@ -72,6 +83,7 @@ export default function DashboardForm({
     const { valid } = validateUserSettings(settings, toast);
     if (!valid) {
       setUnsavedChanges(true);
+      console.log("RIP5")
       return;
     }
 
@@ -85,6 +97,7 @@ export default function DashboardForm({
       })
       .catch((err) => {
         setUnsavedChanges(true);
+        console.log("RIP4")
         toast.toast({
           title: "Error",
           description: "Failed to save settings.",

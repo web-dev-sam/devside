@@ -55,11 +55,14 @@ export function LinkSettings({
   const [enteredPlatform, setEnteredPlatform] = useState<Platform | null>("github");
   const [openSocialDropdown, setOpenSocialDropdown] = useState(false);
   const [attemptedToAdd, setAttemptedToAdd] = useState(false);
+  const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
 
   useEffect(() => {
-    onChange({
-      links,
-    });
+    if (hasUnsavedChanges) {
+      onChange({
+        links,
+      });
+    }
   }, [links]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const urlToUsername = (platform: Platform, url: string) => {
@@ -137,12 +140,14 @@ export function LinkSettings({
                           const newLinks = links.map((l) =>
                             l.platform === social.platform ? { ...l, username: isValidLink.username } : l,
                           );
+                          setHasUnsavedChanges(true);
                           setLinks(newLinks);
                         }}
                       />
                       <Button
                         variant="outline"
                         onClick={() => {
+                          setHasUnsavedChanges(true);
                           setLinks(links.filter((l) => l.platform !== social.platform));
                           setNonSelectedPlatforms([...nonSelectedPlatforms, social.platform]);
                         }}
@@ -228,6 +233,7 @@ export function LinkSettings({
                     }
 
                     setAttemptedToAdd(false);
+                    setHasUnsavedChanges(true);
                     setLinks([...links, { platform: enteredPlatform, username: isValidLink.username }]);
                     setNonSelectedPlatforms(nonSelectedPlatforms.filter((p) => p !== enteredPlatform));
                     setEnteredPlatform(null);

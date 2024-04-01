@@ -22,17 +22,17 @@ export function saveUserSettings(data: UserSettingsData) {
 }
 
 export function validateUserSettings(
-  settings: UserSettingsData,
+  settings: Partial<UserSettingsData>,
   toast?: ReturnType<typeof useToast>,
 ): {
   valid: boolean;
   message?: string;
 } {
-  const userNameValid = settings.username.length > 0;
-  const roleValid = settings.role.length < 48;
-  const locationValid = settings.location.length < 48;
-  const bioValid = settings.bio.length < 256;
-  const linksValid = settings.links.every((link) => {
+  const userNameValid = settings.username && settings.username.length > 0;
+  const roleValid = settings.role == null || settings.role.length < 48;
+  const locationValid = settings.location == null || settings.location.length < 48;
+  const bioValid = settings.bio == null || settings.bio.length < 256;
+  const linksValid = settings.links != null && settings.links.every((link) => {
     return link.username.length < 256 && PLATFORMS.includes(link.platform);
   });
 

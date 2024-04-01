@@ -1,6 +1,7 @@
 import { NextResponse, NextRequest } from "next/server";
 import connectMongo from "@/libs/mongoose";
 import { ensureAuthorized } from "@/lib/server-api";
+import { UserSettingsData, validateUserSettings } from "@/lib/api";
 
 export async function POST(req: NextRequest) {
   await connectMongo();
@@ -9,13 +10,17 @@ export async function POST(req: NextRequest) {
     return response;
   }
 
-  const data = await req.json();
+  const data = await req.json() as Partial<UserSettingsData>;
+  const isValid = validateUserSettings(data);
+  if (!isValid.valid) {
+    return NextResponse.json({ error: isValid.message }, { status: 400 });
+  }
 
   if (data.username) user.name = data.username;
   if (data.role != null) user.role = data.role;
   if (data.location != null) user.location = data.location;
   if (data.bio != null) user.bio = data.bio;
-  if (data.links) {
+  if (data.links !== user.socialLinks) {
     user.socialLinks = data.links;
   }
 
