@@ -2,12 +2,9 @@
 const nextConfig = {
   reactStrictMode: true,
   images: {
-    domains: [
-      "lh3.googleusercontent.com",
-      "pbs.twimg.com",
-      "images.unsplash.com",
-      "logos-world.net",
-      "devside.s3.eu-central-1.amazonaws.com",
+    remotePatterns: [
+      { protocol: 'https', hostname: 'lh3.googleusercontent.com' },
+      { protocol: 'https', hostname: 'devside.s3.eu-central-1.amazonaws.com' },
     ],
   },
 };

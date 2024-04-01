@@ -79,11 +79,10 @@ export function GeneralSettings({
               <Input type="file" id="pfp" placeholder="shadcn" className="sr-only" />
             </div>
             <div>
-              <Label htmlFor="name">Your name</Label>
+              <Label htmlFor="name">Your Name</Label>
               <Input
                 type="text"
                 id="name"
-                placeholder="Jeff Bezos"
                 defaultValue={serverUserName}
                 onInput={(e) => setUsername(e.currentTarget.value)}
               />
@@ -93,7 +92,6 @@ export function GeneralSettings({
               <Input
                 type="text"
                 id="role"
-                placeholder="Potato Peeler"
                 defaultValue={serverRole}
                 onInput={(e) => setRole(e.currentTarget.value)}
               />
@@ -103,15 +101,13 @@ export function GeneralSettings({
               <Input
                 type="text"
                 id="location"
-                placeholder="Canada"
                 defaultValue={serverLocation}
                 onInput={(e) => setLocation(e.currentTarget.value)}
               />
             </div>
             <div>
-              <Label htmlFor="bio">Bio</Label>
+              <Label htmlFor="bio">Short Bio</Label>
               <Textarea
-                placeholder="e.g. What inspires you?"
                 defaultValue={serverBio}
                 onInput={(e) => setBio(e.currentTarget.value)}
               />

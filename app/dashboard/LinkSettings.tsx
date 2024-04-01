@@ -16,8 +16,8 @@ import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, Command
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Check, ChevronsUpDown, Trash } from "lucide-react";
 
-export type Platform = "twitter" | "github" | "linkedin" | "dribbble" | "behance";
-
+export const PLATFORMS = ["twitter", "github", "linkedin", "dribbble", "behance"] as const;
+export type Platform = (typeof PLATFORMS)[number];
 export type SocialLink = {
   platform: Platform;
   username: string;

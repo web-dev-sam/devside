@@ -12,9 +12,9 @@ export async function POST(req: NextRequest) {
   const data = await req.json();
 
   if (data.username) user.name = data.username;
-  if (data.role) user.role = data.role;
-  if (data.location) user.location = data.location;
-  if (data.bio) user.bio = data.bio;
+  if (data.role != null) user.role = data.role;
+  if (data.location != null) user.location = data.location;
+  if (data.bio != null) user.bio = data.bio;
   if (data.links) {
     user.socialLinks = data.links;
   }

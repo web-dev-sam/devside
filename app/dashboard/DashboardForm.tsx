@@ -1,18 +1,18 @@
 "use client";
 
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 
 import { Button } from "@/components/ui/button";
 import { GeneralSettings, type GeneralSettingsData } from "./GeneralSettings";
-import { LinkSettings, SocialLink, SocialSettingsData } from "./LinkSettings";
+import { LinkSettings, PLATFORMS, SocialLink, SocialSettingsData } from "./LinkSettings";
 import { ProjectSettings } from "./ProjectSettings";
 import Image from "next/image";
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { debounceImmediate } from "@/lib/utils";
+import { debounceImmediate, useHasHydrated } from "@/lib/utils";
 import { Pen } from "lucide-react";
 import { Input } from "@/components/ui/input";
-import { saveUserSettings, uploadProfileImage } from "@/lib/api";
+import { saveUserSettings, uploadProfileImage, validateUserSettings } from "@/lib/api";
 import { useToast } from "@/components/ui/use-toast";
 
 export default function DashboardForm({
@@ -30,7 +30,11 @@ export default function DashboardForm({
   serverBio: string;
   serverSocialLinks: SocialLink[];
 }) {
-  const [currentTab, setCurrentTab] = useState("general");
+  const hasHydrated = useHasHydrated();
+  const TABS = ["general", "socials", "projects"];
+  const defaultTab =
+    typeof location !== "undefined" && TABS.includes(location.hash.slice(1)) ? location.hash.slice(1) : "general";
+  const [currentTab, setCurrentTab] = useState(defaultTab);
   const [pfp, setPfp] = useState(serverPfp);
   const [unsavedChanges, setUnsavedChanges] = useState(false);
   const toast = useToast();
@@ -44,6 +48,10 @@ export default function DashboardForm({
   const [socialData, setSocialData] = useState<SocialSettingsData>({
     links: [],
   });
+
+  useEffect(() => {
+    location.hash = currentTab;
+  }, [currentTab]);
 
   function onGeneralChange(data: GeneralSettingsData) {
     setGeneralData(data);
@@ -61,6 +69,12 @@ export default function DashboardForm({
       ...socialData,
     };
 
+    const { valid } = validateUserSettings(settings, toast);
+    if (!valid) {
+      setUnsavedChanges(true);
+      return;
+    }
+
     saveUserSettings(settings)
       .then(() => {
         setUnsavedChanges(false);
@@ -70,7 +84,7 @@ export default function DashboardForm({
         });
       })
       .catch((err) => {
-        console.error("Failed to save settings", err);
+        setUnsavedChanges(true);
         toast.toast({
           title: "Error",
           description: "Failed to save settings.",
@@ -136,6 +150,10 @@ export default function DashboardForm({
     }
   }
 
+  if (!hasHydrated) {
+    return <></>;
+  }
+
   return (
     <>
       <main className="min-h-screen p-8 pb-24 text-center">
@@ -162,7 +180,7 @@ export default function DashboardForm({
           </div>
         </div>
         <h1 className="text-3xl md:text-4xl font-extrabold font-calcom my-28">Your Devside</h1>
-        <Tabs defaultValue="general" className="w-[400px] mx-auto">
+        <Tabs defaultValue={currentTab} className="w-[400px] mx-auto">
           <TabsList className="mb-4">
             <TabsTrigger value="general" onClick={() => setCurrentTab("general")}>
               General
@@ -184,10 +202,7 @@ export default function DashboardForm({
             />
           </TabsContent>
           <TabsContent forceMount value="socials" hidden={currentTab !== "socials"}>
-            <LinkSettings
-              serverLinks={serverSocialLinks}
-              onChange={(data) => onSocialChange(data)}
-            />
+            <LinkSettings serverLinks={serverSocialLinks} onChange={(data) => onSocialChange(data)} />
           </TabsContent>
           <TabsContent forceMount value="projects" hidden={currentTab !== "projects"}>
             <ProjectSettings />
@@ -195,7 +210,7 @@ export default function DashboardForm({
         </Tabs>
         <div>
           <Button disabled={!unsavedChanges} onClick={() => debounceImmediate(onSave, 300)()} className="my-28">
-            {unsavedChanges ? "Save" : "Saved"}
+            Save
           </Button>
         </div>
       </main>
