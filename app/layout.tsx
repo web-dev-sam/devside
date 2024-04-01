@@ -43,12 +43,9 @@ export default function RootLayout({ children }: { children: ReactNode }) {
           <PlausibleProvider domain={config.domainName} />
         </head>
       )}
-      <body className="max-w-screen overflow-x-hidden">
+      <body>
         {/* ClientLayout contains all the client wrappers (Crisp chat support, toast messages, tooltips, etc.) */}
-        <ClientLayout>
-          {children}
-          <Toaster />
-        </ClientLayout>
+        <ClientLayout>{children}</ClientLayout>
       </body>
     </html>
   );

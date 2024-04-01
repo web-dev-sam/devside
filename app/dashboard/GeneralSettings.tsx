@@ -72,15 +72,9 @@ export function GeneralSettings({
 
   return (
     <>
-      <section className="max-w-xl mx-auto space-y-8">
+      <section className="md:max-w-xl mx-auto space-y-8">
         <div className="space-y-4">
           <div className="grid w-full max-w-sm items-center gap-1.5 mx-auto">
-            <div>
-              <Label htmlFor="pfp" className="sr-only">
-                Profile Image
-              </Label>
-              <Input type="file" id="pfp" placeholder="shadcn" className="sr-only" />
-            </div>
             <div>
               <Label htmlFor="name">Your Name</Label>
               <Input

@@ -109,7 +109,7 @@ export function LinkSettings({
 
   return (
     <>
-      <section className="max-w-xl mx-auto space-y-8">
+      <section className="md:max-w-xl mx-auto space-y-8">
         <div>
           {links.length > 0 && (
             <ul className="text-left mb-2">

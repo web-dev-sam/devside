@@ -169,14 +169,14 @@ export default function DashboardForm({
 
   return (
     <>
-      <main className="min-h-screen p-8 pb-24 text-center">
+      <main className="min-h-screen p-4 md:p-8 pb-24 text-center">
         <div
           className="relative my-28 w-32 mx-auto rounded-lg overflow-hidden group cursor-pointer"
           onClick={() => {
             document.getElementById("pfp")?.click();
           }}
         >
-          <Input type="file" accept="image/*" className="sr-only" id="pfp" onChange={(e) => onPfpChange(e)} />
+          <Input type="file" accept="image/*" className="hidden" id="pfp" onChange={(e) => onPfpChange(e)} />
           <Image
             src={pfp}
             width={128}
@@ -193,7 +193,7 @@ export default function DashboardForm({
           </div>
         </div>
         <h1 className="text-3xl md:text-4xl font-extrabold font-calcom my-28">Your Devside</h1>
-        <Tabs defaultValue={currentTab} className="w-[400px] mx-auto">
+        <Tabs defaultValue={currentTab} className="md:w-[400px] mx-auto">
           <TabsList className="mb-4">
             <TabsTrigger value="general" onClick={() => setCurrentTab("general")}>
               General
