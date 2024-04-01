@@ -55,21 +55,24 @@ const FRAMEWORKS: Technology[] = [
 ];
 
 export type Technology = {
+  _id?: any;
   name: string;
   logo: string;
   link: string;
 };
 
 export type Project = {
+  _id?: any;
   id: string;
   name: string;
   link: string;
   description: string;
   stack: Technology[];
-  logo: File | null;
+  logo?: string | File;
 };
 
 export type ProjectSettingsData = {
+  _id?: any;
   projects: Project[];
 };
 
@@ -223,7 +226,12 @@ export function ProjectSettings({
                 <div className="flex-1 space-y-2 rounded-lg">
                   <div className="flex">
                     {project.logo && (
-                      <Image src={URL.createObjectURL(project.logo)} alt={project.name} width={64} height={64} />
+                      <Image
+                        src={typeof project.logo === "string" ? project.logo : URL.createObjectURL(project.logo)}
+                        alt={project.name}
+                        width={64}
+                        height={64}
+                      />
                     )}
                     <Input
                       className="text-lg font-semibold"
@@ -271,7 +279,18 @@ export function ProjectSettings({
                     />
                   </div>
                   <p>
-                    <Textarea defaultValue={project.description} placeholder="Description.." />
+                    <Textarea
+                      defaultValue={project.description}
+                      placeholder="Description.."
+                      onInput={(e) => {
+                        setProjects((prev) => {
+                          const newProjects = [...prev];
+                          newProjects[index].description = ((e.target || e.currentTarget) as any).value.trim();
+                          return newProjects;
+                        });
+                        setHasUnsavedChanges(true);
+                      }}
+                    />
                   </p>
                 </div>
                 <div className="flex flex-col gap-2">

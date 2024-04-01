@@ -14,6 +14,7 @@ import { Pen } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { saveUserSettings, uploadProfileImage, validateUserSettings } from "@/lib/api";
 import { useToast } from "@/components/ui/use-toast";
+import { IUser } from "@/models/User";
 
 export default function DashboardForm({
   serverUserName,
@@ -22,13 +23,15 @@ export default function DashboardForm({
   serverLocation,
   serverBio,
   serverSocialLinks,
+  serverProjects,
 }: {
   serverUserName: string;
   serverPfp: string;
   serverRole: string;
   serverLocation: string;
   serverBio: string;
-  serverSocialLinks: SocialLink[];
+  serverSocialLinks: IUser["socialLinks"];
+  serverProjects: IUser["projects"];
 }) {
   const hasHydrated = useHasHydrated();
   const TABS = ["general", "socials", "projects"];
@@ -46,10 +49,10 @@ export default function DashboardForm({
     bio: serverBio,
   });
   const [socialData, setSocialData] = useState<SocialSettingsData>({
-    links: [],
+    links: serverSocialLinks,
   });
   const [projectsData, setProjectsData] = useState<ProjectSettingsData>({
-    projects: [],
+    projects: serverProjects as ProjectSettingsData["projects"],
   });
 
   useEffect(() => {
@@ -93,7 +96,17 @@ export default function DashboardForm({
     }
 
     saveUserSettings(settings)
-      .then(() => {
+      .then(async (res) => {
+        if (!res.ok) {
+          setUnsavedChanges(true);
+          toast.toast({
+            title: "Error",
+            description: await res.json().then((data) => data.error),
+            variant: "destructive",
+          });
+          return;
+        }
+
         setUnsavedChanges(false);
         toast.toast({
           title: "Success",
@@ -223,7 +236,7 @@ export default function DashboardForm({
             <LinkSettings serverLinks={serverSocialLinks} onChange={(data) => onSocialChange(data)} />
           </TabsContent>
           <TabsContent forceMount value="projects" hidden={currentTab !== "projects"}>
-            <ProjectSettings serverProjects={projectsData.projects} onChange={(data) => onProjectChange(data)} />
+            <ProjectSettings serverProjects={serverProjects} onChange={(data) => onProjectChange(data)} />
           </TabsContent>
         </Tabs>
         <div>

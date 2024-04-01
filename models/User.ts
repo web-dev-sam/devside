@@ -1,6 +1,7 @@
 import mongoose, { Document } from "mongoose";
 import toJSON from "./plugins/toJSON";
 import { Platform } from "@/app/dashboard/LinkSettings";
+import type { ProjectSettingsData } from "@/app/dashboard/ProjectSettings";
 
 // USER SCHEMA
 const userSchema = new mongoose.Schema(
@@ -34,12 +35,49 @@ const userSchema = new mongoose.Schema(
       {
         platform: {
           type: String,
-          enum: ['twitter', 'github', 'linkedin', 'dribbble', 'behance'] as Platform[]
+          enum: ["twitter", "github", "linkedin", "dribbble", "behance"] as Platform[],
         },
         username: {
-          type: String
-        }
-      }
+          type: String,
+        },
+      },
+    ],
+    projects: [
+      {
+        name: {
+          type: String,
+          trim: true,
+        },
+        description: {
+          type: String,
+          trim: true,
+        },
+        link: {
+          type: String,
+          trim: true,
+        },
+        stack: {
+          type: [
+            {
+              name: {
+                type: String,
+                trim: true,
+              },
+              logo: {
+                type: String,
+                trim: true,
+              },
+              link: {
+                type: String,
+                trim: true,
+              },
+            },
+          ],
+        },
+        logo: {
+          type: String,
+        },
+      },
     ],
     // Used in the Stripe webhook to identify the user in Stripe and later create Customer Portal or prefill user credit card details
     customerId: {
@@ -71,7 +109,7 @@ const userSchema = new mongoose.Schema(
 userSchema.plugin(toJSON);
 
 export interface IUser extends Document {
-  _id: mongoose.Types.ObjectId;
+  _id?: mongoose.Types.ObjectId;
   name: string;
   email: string;
   image?: string;
@@ -80,9 +118,24 @@ export interface IUser extends Document {
   location?: string;
   bio?: string;
   socialLinks?: {
+    _id?: mongoose.Types.ObjectId;
     platform: Platform;
     username: string;
   }[];
+  projects?: {
+    _id?: mongoose.Types.ObjectId;
+    id: string;
+    name: string;
+    description: string;
+    link: string;
+    stack: {
+      _id?: mongoose.Types.ObjectId;
+      name: string;
+      logo: string;
+      link: string;
+    }[];
+    logo?: string;
+  }[],
   customerId?: string;
   priceId?: string;
   hasAccess?: boolean;

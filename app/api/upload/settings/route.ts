@@ -10,7 +10,7 @@ export async function POST(req: NextRequest) {
     return response;
   }
 
-  const data = await req.json() as Partial<UserSettingsData>;
+  const data = (await req.json()) as Partial<UserSettingsData>;
   const isValid = validateUserSettings(data);
   if (!isValid.valid) {
     return NextResponse.json({ error: isValid.message }, { status: 400 });
@@ -20,14 +20,22 @@ export async function POST(req: NextRequest) {
   if (data.role != null) user.role = data.role;
   if (data.location != null) user.location = data.location;
   if (data.bio != null) user.bio = data.bio;
-  if (data.links !== user.socialLinks) {
+  if (JSON.stringify(data.links) !== JSON.stringify(user.socialLinks)) {
     user.socialLinks = data.links;
+  }
+  if (JSON.stringify(data.projects) !== JSON.stringify(user.projects)) {
+    // Let mongoose handle the id
+    user.projects = data.projects.map((project) => ({
+      ...project,
+      logo: ""
+    }));
   }
 
   try {
     await user.save();
   } catch (error) {
-    return NextResponse.json({ error: "Failed to save user" }, { status: 500 });
+    console.error(error);
+    return NextResponse.json({ error: "An error occurred while saving your settings" }, { status: 500 });
   }
 
   return NextResponse.json({
