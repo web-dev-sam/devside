@@ -72,7 +72,7 @@ export function GeneralSettings({
 
   return (
     <>
-      <section className="md:max-w-xl mx-auto space-y-8">
+      <section className="w-full md:w-2/3 lg:w-1/2 mx-auto space-y-8">
         <div className="space-y-4">
           <div className="grid w-full max-w-sm items-center gap-1.5 mx-auto">
             <div>

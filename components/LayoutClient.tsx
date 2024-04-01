@@ -9,6 +9,7 @@ import NextTopLoader from "nextjs-toploader";
 import { Toaster } from "react-hot-toast";
 import { Tooltip } from "react-tooltip";
 import config from "@/config";
+import { Toaster as BetterToaster } from "@/components/ui/toaster";
 
 // Crisp customer chat support:
 // This component is separated from ClientLayout because it needs to be wrapped with <SessionProvider> to use useSession() hook
@@ -64,6 +65,8 @@ const ClientLayout = ({ children }: { children: ReactNode }) => {
             duration: 3000,
           }}
         />
+
+        <BetterToaster />
 
         {/* Show tooltips if any JSX elements has these 2 attributes: data-tooltip-id="tooltip" data-tooltip-content="" */}
         <Tooltip id="tooltip" className="z-[60] !opacity-100 max-w-sm shadow-lg" />

@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 
 import * as React from "react";
@@ -6,52 +7,28 @@ import { X } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Command, CommandGroup, CommandItem, CommandList } from "@/components/ui/command";
 import { Command as CommandPrimitive } from "cmdk";
+import { Technology } from "./ProjectSettings";
 
-type Framework = Record<"value" | "label", string>;
-
-const FRAMEWORKS = [
-  {
-    value: "next.js",
-    label: "Next.js",
-  },
-  {
-    value: "sveltekit",
-    label: "SvelteKit",
-  },
-  {
-    value: "nuxt.js",
-    label: "Nuxt.js",
-  },
-  {
-    value: "remix",
-    label: "Remix",
-  },
-  {
-    value: "astro",
-    label: "Astro",
-  },
-  {
-    value: "wordpress",
-    label: "WordPress",
-  },
-  {
-    value: "express.js",
-    label: "Express.js",
-  },
-  {
-    value: "nest.js",
-    label: "Nest.js",
-  },
-] satisfies Framework[];
-
-export function FancyMultiSelect() {
+export function FancyMultiSelect({
+  frameworks,
+  onChoose,
+  defaultValues,
+}: {
+  frameworks: Technology[];
+  onChoose: (frameworks: Technology[]) => void;
+  defaultValues?: Technology[];
+}) {
   const inputRef = React.useRef<HTMLInputElement>(null);
   const [open, setOpen] = React.useState(false);
-  const [selected, setSelected] = React.useState<Framework[]>([FRAMEWORKS[4]]);
+  const [selected, setSelected] = React.useState<Technology[]>(defaultValues);
   const [inputValue, setInputValue] = React.useState("");
 
-  const handleUnselect = React.useCallback((framework: Framework) => {
-    setSelected((prev) => prev.filter((s) => s.value !== framework.value));
+  React.useEffect(() => {
+    onChoose(selected);
+  }, [selected]);
+
+  const handleUnselect = React.useCallback((framework: Technology) => {
+    setSelected((prev) => prev.filter((s) => s.link !== framework.link));
   }, []);
 
   const handleKeyDown = React.useCallback((e: React.KeyboardEvent<HTMLDivElement>) => {
@@ -73,18 +50,18 @@ export function FancyMultiSelect() {
     }
   }, []);
 
-  const selectables = FRAMEWORKS.filter((framework) => !selected.includes(framework));
+  const selectables = frameworks.filter((framework) => !selected.includes(framework));
 
   return (
     <Command onKeyDown={handleKeyDown} className="overflow-visible bg-transparent">
-      <div className="group border border-input px-3 py-2 text-sm ring-offset-background rounded-md focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2">
+      <div className="group bg-secondary text-secondary-foreground px-3 py-2 text-sm rounded-md">
         <div className="flex gap-1 flex-wrap">
           {selected.map((framework) => {
             return (
-              <Badge key={framework.value} variant="secondary">
-                {framework.label}
+              <Badge key={framework.link}>
+                {framework.name}
                 <button
-                  className="ml-1 ring-offset-background rounded-full outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
+                  className="ml-1 rounded-full outline-none"
                   onKeyDown={(e) => {
                     if (e.key === "Enter") {
                       handleUnselect(framework);
@@ -108,12 +85,12 @@ export function FancyMultiSelect() {
             onValueChange={setInputValue}
             onBlur={() => setOpen(false)}
             onFocus={() => setOpen(true)}
-            placeholder="Select frameworks..."
-            className="ml-2 bg-transparent outline-none placeholder:text-muted-foreground flex-1"
+            placeholder="Your stack.."
+            className="ml-2 bg-transparent outline-none placeholder:text-[#aab0bb] flex-1"
           />
         </div>
       </div>
-      <div className="relative mt-2">
+      <div className="relative">
         {open && selectables.length > 0 ? (
           <div className="absolute w-full z-10 top-0 rounded-md border bg-popover text-popover-foreground shadow-md outline-none animate-in">
             <CommandGroup className="h-full overflow-auto">
@@ -121,7 +98,7 @@ export function FancyMultiSelect() {
                 {selectables.map((framework) => {
                   return (
                     <CommandItem
-                      key={framework.value}
+                      key={framework.link}
                       onMouseDown={(e) => {
                         e.preventDefault();
                         e.stopPropagation();
@@ -132,7 +109,7 @@ export function FancyMultiSelect() {
                       }}
                       className={"cursor-pointer"}
                     >
-                      {framework.label}
+                      {framework.name}
                     </CommandItem>
                   );
                 })}

@@ -5,7 +5,7 @@ import { ChangeEvent, useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { GeneralSettings, type GeneralSettingsData } from "./GeneralSettings";
 import { LinkSettings, PLATFORMS, SocialLink, SocialSettingsData } from "./LinkSettings";
-import { ProjectSettings } from "./ProjectSettings";
+import { ProjectSettings, ProjectSettingsData } from "./ProjectSettings";
 import Image from "next/image";
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -48,6 +48,9 @@ export default function DashboardForm({
   const [socialData, setSocialData] = useState<SocialSettingsData>({
     links: [],
   });
+  const [projectsData, setProjectsData] = useState<ProjectSettingsData>({
+    projects: [],
+  });
 
   useEffect(() => {
     location.hash = currentTab;
@@ -55,7 +58,6 @@ export default function DashboardForm({
 
   useEffect(() => {
     if (unsavedChanges) {
-      console.log("RIP")
       window.onbeforeunload = () => true;
     } else {
       window.onbeforeunload = null;
@@ -65,25 +67,28 @@ export default function DashboardForm({
   function onGeneralChange(data: GeneralSettingsData) {
     setGeneralData(data);
     setUnsavedChanges(true);
-    console.log("RIP2")
   }
 
   function onSocialChange(data: SocialSettingsData) {
     setSocialData(data);
     setUnsavedChanges(true);
-    console.log("RIP3")
+  }
+
+  function onProjectChange(data: any) {
+    setProjectsData(data);
+    setUnsavedChanges(true);
   }
 
   async function onSave() {
     const settings = {
       ...generalData,
       ...socialData,
+      ...projectsData,
     };
 
     const { valid } = validateUserSettings(settings, toast);
     if (!valid) {
       setUnsavedChanges(true);
-      console.log("RIP5")
       return;
     }
 
@@ -97,7 +102,7 @@ export default function DashboardForm({
       })
       .catch((err) => {
         setUnsavedChanges(true);
-        console.log("RIP4")
+        console.log("RIP4");
         toast.toast({
           title: "Error",
           description: "Failed to save settings.",
@@ -193,7 +198,7 @@ export default function DashboardForm({
           </div>
         </div>
         <h1 className="text-3xl md:text-4xl font-extrabold font-calcom my-28">Your Devside</h1>
-        <Tabs defaultValue={currentTab} className="md:w-[400px] mx-auto">
+        <Tabs defaultValue={currentTab} className="mx-auto">
           <TabsList className="mb-4">
             <TabsTrigger value="general" onClick={() => setCurrentTab("general")}>
               General
@@ -218,7 +223,7 @@ export default function DashboardForm({
             <LinkSettings serverLinks={serverSocialLinks} onChange={(data) => onSocialChange(data)} />
           </TabsContent>
           <TabsContent forceMount value="projects" hidden={currentTab !== "projects"}>
-            <ProjectSettings />
+            <ProjectSettings serverProjects={projectsData.projects} onChange={(data) => onProjectChange(data)} />
           </TabsContent>
         </Tabs>
         <div>

@@ -77,6 +77,18 @@ export function LinkSettings({
     );
   };
 
+  const socialPlaceholder = (platform: Platform | null) => {
+    return (
+      {
+        twitter: "@username",
+        github: "username",
+        linkedin: "username",
+        dribbble: "username",
+        behance: "username",
+      }[platform] ?? "Username"
+    );
+  };
+
   function checkLinkValidity(
     platform: Platform,
     url: string,
@@ -109,12 +121,12 @@ export function LinkSettings({
 
   return (
     <>
-      <section className="md:max-w-xl mx-auto space-y-8">
+      <section className="w-full md:w-2/3 lg:w-1/2 max-w-[600px] mx-auto space-y-8">
         <div>
           {links.length > 0 && (
             <ul className="text-left mb-2">
               {links.map((social) => (
-                <li key={social.platform} className="flex items-center py-1 cursor-move">
+                <li key={social.platform} className="flex items-center py-1">
                   <div className="py-2 px-3 flex flex-1">
                     <div className="flex flex-1 gap-2">
                       <div>
@@ -132,7 +144,7 @@ export function LinkSettings({
                             return;
                           }
 
-                          const isValidLink = checkLinkValidity(currentLink.platform, e.currentTarget.value);
+                          const isValidLink = checkLinkValidity(currentLink.platform, newInput);
                           if (!isValidLink.valid) {
                             return;
                           }
@@ -209,7 +221,7 @@ export function LinkSettings({
               </div>
               <div className="flex-1">
                 <Input
-                  placeholder="Link..."
+                  placeholder={socialPlaceholder(enteredPlatform)}
                   className={cn(!enteredSocialLink && attemptedToAdd ? "border-red-500" : "")}
                   onInput={(e) => {
                     setEnteredSocialLink(e.currentTarget.value);
