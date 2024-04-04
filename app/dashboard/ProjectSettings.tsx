@@ -117,21 +117,17 @@ export function ProjectSettings({
               <Input
                 type="text"
                 placeholder="Name.."
+                value={enteredProjectName}
                 onInput={(e) => setEnteredProjectName(((e.target || e.currentTarget) as any).value.trim())}
-              />
-            </div>
-            <div className="flex-1">
-              <Input
-                type="text"
-                placeholder="Link.."
-                onInput={(e) => setEnteredProjectLink(((e.target || e.currentTarget) as any).value.trim())}
               />
             </div>
           </div>
           <div>
-            <Textarea
-              placeholder="Description.."
-              onInput={(e) => setEnteredProjectDescription(((e.target || e.currentTarget) as any).value.trim())}
+            <Input
+              type="text"
+              placeholder="Link.."
+              value={enteredProjectLink}
+              onInput={(e) => setEnteredProjectLink(((e.target || e.currentTarget) as any).value.trim())}
             />
           </div>
           <div>
@@ -141,6 +137,13 @@ export function ProjectSettings({
                 setEnteredProjectStack(techs);
               }}
               defaultValues={[]}
+            />
+          </div>
+          <div>
+            <Textarea
+              placeholder="Description.."
+              onInput={(e) => setEnteredProjectDescription(((e.target || e.currentTarget) as any).value.trim())}
+              value={enteredProjectDescription}
             />
           </div>
           <div>
@@ -176,6 +179,9 @@ export function ProjectSettings({
                     logo: enteredProjectLogo,
                   },
                 ]);
+                setEnteredProjectDescription("");
+                setEnteredProjectLink("");
+                setEnteredProjectName("");
                 setHasUnsavedChanges(true);
               }}
             >

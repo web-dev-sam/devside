@@ -16,18 +16,17 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: isValid.message }, { status: 400 });
   }
 
-  if (data.username) user.name = data.username;
-  if (data.role != null) user.role = data.role;
-  if (data.location != null) user.location = data.location;
-  if (data.bio != null) user.bio = data.bio;
+  if (data.username && user.name !== data.username) user.name = data.username;
+  if (data.role != null && user.role !== data.role) user.role = data.role;
+  if (data.location != null && user.location !== data.location) user.location = data.location;
+  if (data.bio != null && user.bio !== data.bio) user.bio = data.bio;
   if (JSON.stringify(data.links) !== JSON.stringify(user.socialLinks)) {
     user.socialLinks = data.links;
   }
   if (JSON.stringify(data.projects) !== JSON.stringify(user.projects)) {
-    // Let mongoose handle the id
     user.projects = data.projects.map((project) => ({
       ...project,
-      logo: ""
+      logo: "",
     }));
   }
 

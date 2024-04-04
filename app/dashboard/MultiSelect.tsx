@@ -86,7 +86,7 @@ export function FancyMultiSelect({
             onBlur={() => setOpen(false)}
             onFocus={() => setOpen(true)}
             placeholder="Your stack.."
-            className="ml-2 bg-transparent outline-none placeholder:text-[#aab0bb] flex-1"
+            className="bg-transparent outline-none placeholder:text-[#aab0bb] flex-1"
           />
         </div>
       </div>
