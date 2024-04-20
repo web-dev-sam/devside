@@ -17,6 +17,7 @@ export async function POST(req: NextRequest) {
   }
 
   if (data.username && user.name !== data.username) user.name = data.username;
+  if (data.path && user.path !== data.path) user.path = data.path;
   if (data.role != null && user.role !== data.role) user.role = data.role;
   if (data.location != null && user.location !== data.location) user.location = data.location;
   if (data.bio != null && user.bio !== data.bio) user.bio = data.bio;

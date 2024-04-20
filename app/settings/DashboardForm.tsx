@@ -24,12 +24,14 @@ export default function DashboardForm({
   serverBio,
   serverSocialLinks,
   serverProjects,
+  serverPath,
 }: {
   serverUserName: string;
   serverPfp: string;
   serverRole: string;
   serverLocation: string;
   serverBio: string;
+  serverPath: string;
   serverSocialLinks: IUser["socialLinks"];
   serverProjects: IUser["projects"];
 }) {
@@ -47,6 +49,7 @@ export default function DashboardForm({
     role: serverRole,
     location: serverLocation,
     bio: serverBio,
+    path: serverPath,
   });
   const [socialData, setSocialData] = useState<SocialSettingsData>({
     links: serverSocialLinks,
@@ -89,6 +92,7 @@ export default function DashboardForm({
       ...projectsData,
     };
 
+    console.log("Saving", settings);
     const { valid } = validateUserSettings(settings, toast);
     if (!valid) {
       setUnsavedChanges(true);
@@ -187,7 +191,7 @@ export default function DashboardForm({
 
   return (
     <>
-      <main className="min-h-screen p-4 md:p-8 pb-24 text-center">
+      <main className="p-4 md:p-8 pb-24 text-center">
         <div
           className="relative my-28 w-32 mx-auto rounded-lg overflow-hidden group cursor-pointer"
           onClick={() => {
@@ -210,7 +214,6 @@ export default function DashboardForm({
             </div>
           </div>
         </div>
-        <h1 className="text-3xl md:text-4xl font-extrabold font-calcom my-28">Your Devside</h1>
         <Tabs defaultValue={currentTab} className="mx-auto">
           <TabsList className="mb-4">
             <TabsTrigger value="general" onClick={() => setCurrentTab("general")}>
@@ -229,6 +232,7 @@ export default function DashboardForm({
               serverRole={serverRole}
               serverLocation={serverLocation}
               serverBio={serverBio}
+              serverPath={serverPath}
               onChange={(data) => onGeneralChange(data)}
             />
           </TabsContent>

@@ -100,7 +100,7 @@ export function ProjectSettings({
 
   return (
     <>
-      <section className="flex flex-col lg:flex-row w-full md:w-full lg:w-2/3 max-w-[1200px] mx-auto justify-center mt-16 gap-8">
+      <section className="flex flex-col w-full md:w-full lg:w-2/3 max-w-[1200px] mx-auto justify-center mt-16 gap-8">
         <div className="space-y-2 flex-1">
           <div className="flex gap-2">
             <div className="hidden">

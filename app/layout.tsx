@@ -8,6 +8,11 @@ import ClientLayout from "@/components/LayoutClient";
 import config from "@/config";
 import "./globals.css";
 import { Toaster } from "@/components/ui/toaster";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/libs/next-auth";
+import Header from "@/components/internal/Header";
+import OutsideHeader from "@/components/Header";
+import User, { IUser } from "@/models/User";
 
 const font = Inter({
   subsets: ["latin"],
@@ -35,7 +40,10 @@ export const viewport: Viewport = {
 // You can override them in each page passing params to getSOTags() function.
 export const metadata = getSEOTags();
 
-export default function RootLayout({ children }: { children: ReactNode }) {
+export default async function RootLayout({ children }: { children: ReactNode }) {
+  const session = await getServerSession(authOptions);
+  const user: IUser = await User.findById(session.user.id);
+
   return (
     <html lang="en" data-theme={config.colors.theme} className={`${calcom.variable} ${font.variable} font-inter`}>
       {config.domainName && (
@@ -43,8 +51,9 @@ export default function RootLayout({ children }: { children: ReactNode }) {
           <PlausibleProvider domain={config.domainName} />
         </head>
       )}
-      <body>
+      <body className="min-h-screen">
         {/* ClientLayout contains all the client wrappers (Crisp chat support, toast messages, tooltips, etc.) */}
+        {session ? <Header pfp={user.customImage || user.image} path={user.path} /> : <OutsideHeader />}
         <ClientLayout>{children}</ClientLayout>
       </body>
     </html>

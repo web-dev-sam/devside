@@ -1,6 +1,6 @@
-import type { GeneralSettingsData } from "@/app/dashboard/GeneralSettings";
-import type { SocialSettingsData } from "@/app/dashboard/LinkSettings";
-import type { ProjectSettingsData } from "@/app/dashboard/ProjectSettings";
+import type { GeneralSettingsData } from "@/app/settings/GeneralSettings";
+import type { SocialSettingsData } from "@/app/settings/LinkSettings";
+import type { ProjectSettingsData } from "@/app/settings/ProjectSettings";
 import { useToast } from "@/components/ui/use-toast";
 
 export function uploadProfileImage(file: File) {
@@ -31,6 +31,8 @@ export function validateUserSettings(
 } {
   const PLATFORMS = ["twitter", "github", "linkedin", "dribbble", "behance"] as const;
   const userNameValid = settings.username && settings.username.length > 0;
+  console.log(settings.path)
+  const pathValid = settings.path == null || /^[a-z0-9-]+$/i.test(settings.path);
   const roleValid = settings.role == null || settings.role.length < 48;
   const locationValid = settings.location == null || settings.location.length < 48;
   const bioValid = settings.bio == null || settings.bio.length < 256;
@@ -49,8 +51,6 @@ export function validateUserSettings(
         project.stack.length <= 10
       );
     });
-  console.log(settings);
-  console.log(projectsValid)
 
   if (!userNameValid) {
     toast?.toast({
@@ -61,6 +61,18 @@ export function validateUserSettings(
     return {
       valid: false,
       message: "Username is required",
+    };
+  }
+
+  if (!pathValid) {
+    toast?.toast({
+      title: "Invalid URL user path",
+      description: "Path can only contain small letters, numbers, and dashes",
+      variant: "destructive",
+    });
+    return {
+      valid: false,
+      message: "Invalid path",
     };
   }
 

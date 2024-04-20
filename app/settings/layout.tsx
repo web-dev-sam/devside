@@ -11,7 +11,6 @@ import config from "@/config";
 // See https://shipfa.st/docs/tutorials/private-page
 export default async function LayoutPrivate({ children }: { children: ReactNode }) {
   const session = await getServerSession(authOptions);
-
   if (!session) {
     redirect(config.auth.loginUrl);
   }

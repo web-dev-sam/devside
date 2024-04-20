@@ -1,7 +1,7 @@
 import mongoose, { Document } from "mongoose";
 import toJSON from "./plugins/toJSON";
-import { Platform } from "@/app/dashboard/LinkSettings";
-import type { ProjectSettingsData } from "@/app/dashboard/ProjectSettings";
+import { Platform } from "@/app/settings/LinkSettings";
+import type { ProjectSettingsData } from "@/app/settings/ProjectSettings";
 
 // USER SCHEMA
 const userSchema = new mongoose.Schema(
@@ -9,6 +9,13 @@ const userSchema = new mongoose.Schema(
     name: {
       type: String,
       trim: true,
+    },
+    path: {
+      type: String,
+      trim: true,
+      validate(value: string) {
+        return /^[a-z0-9-]+$/i.test(value);
+      },
     },
     email: {
       type: String,
@@ -110,6 +117,7 @@ userSchema.plugin(toJSON);
 
 export interface IUser extends Document {
   _id?: mongoose.Types.ObjectId;
+  path: string;
   name: string;
   email: string;
   image?: string;
